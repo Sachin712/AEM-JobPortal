@@ -18,17 +18,29 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "company")
 public class Company {
+	public Company(String company_name, String company_address, String company_contact, String company_email,
+			String company_website, String username, String password, String account_status) {
+		super();
+		this.company_name = company_name;
+		this.company_address = company_address;
+		this.company_contact = company_contact;
+		this.company_email = company_email;
+		this.company_website = company_website;
+		this.username = username;
+		this.password = password;
+		this.account_status = account_status;
+	}
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
 	@Column(name = "company_id")
-	private String company_id;
+	private String id;
 	private String company_name;
 	private String company_address;
-	private int company_contact;
+	private String company_contact;
 	private String company_email;
 	private String company_website;
 	private String username;
 	private String password;
-	private int account_status;
+	private String account_status;
 }
