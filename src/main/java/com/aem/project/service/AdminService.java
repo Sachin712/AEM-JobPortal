@@ -6,8 +6,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.aem.project.entity.Admin;
 import com.aem.project.repository.AdminRepository;
@@ -34,28 +32,27 @@ public class AdminService {
 	}
 
 	// Updating an existing admin
-	public Admin updateAdmin(Optional<Admin> adminData, Admin adminInfo, String admin_name, String admin_contact, String admin_email, String admin_username,String admin_password)
-			throws IOException {
+	public Admin updateAdmin(Optional<Admin> adminData, Admin adminInfo, String admin_name, String admin_contact,
+			String admin_email, String admin_username, String admin_password) throws IOException {
 
 		adminInfo.setAdmin_name(admin_name);
 		adminInfo.setAdmin_contact(admin_contact);
 		adminInfo.setAdmin_email(admin_email);
 		adminInfo.setAdmin_username(admin_username);
 		adminInfo.setAdmin_password(admin_password);
-		
+
 		return adminRepo.save(adminInfo);
 	}
-	
+
 	// Accessing findById for getting an admin
 	public Optional<Admin> getApplicantById(String admin_id) {
 		return adminRepo.findById(admin_id);
 	}
+
 	// Accessing admindata for adding an admin
 	public Admin addAdmin(Admin adminData) {
 		return adminRepo.save(adminData);
-		
+
 	}
-
-
 
 }

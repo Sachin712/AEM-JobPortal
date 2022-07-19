@@ -57,9 +57,9 @@ public class AdminController {
 	// Updating admin info
 	@PutMapping("/admins/{id}")
 	public ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody Admin admin) {
-		Optional<Admin> userData = adminService.findById(id);
-		if (userData.isPresent()) {
-			Admin adminInfo = userData.get();
+		Optional<Admin> adminData = adminService.findById(id);
+		if (adminData.isPresent()) {
+			Admin adminInfo = adminData.get();
 		adminInfo.setAdmin_name(admin.getAdmin_name());
 		adminInfo.setAdmin_contact(admin.getAdmin_contact());
 		adminInfo.setAdmin_email(admin.getAdmin_email());
