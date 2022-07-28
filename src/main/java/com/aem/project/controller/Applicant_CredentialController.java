@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,5 +68,36 @@ public class Applicant_CredentialController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 		}
+	}
+
+	// Get credential by Id
+	@GetMapping("/credentials/{id}")
+	public Optional<Applicant_Credential> getCredential(@PathVariable("id") String id) {
+
+		return applicant_CredentialService.getCredentialById(id);
+	}
+
+	// Update a credential
+	@PutMapping("/credentials/{id}")
+	public ResponseEntity<String> updateCredential(@PathVariable("id") String id,
+			@RequestParam("credential_name") String credential_name, @RequestParam(value = "file") MultipartFile file) {
+
+		Optional<Applicant_Credential> credentialData = applicant_CredentialService.getCredentialById(id);
+		if (credentialData.isPresent()) {
+			Applicant_Credential credentialInfo = credentialData.get();
+			try {
+				applicant_CredentialService.updateCredential(credentialData, credentialInfo, credential_name, file);
+				logger.info("Accessing put method... Credential updated successully.");
+				return ResponseEntity.ok("Credential Updated");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		} else {
+			new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return ResponseEntity.ok("Credential not found.");
+		}
+
 	}
 }

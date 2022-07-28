@@ -26,7 +26,7 @@ public class Applicant_Credential {
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
 	@Column(name = "credential_id")
-	private String credentialID;
+	private String id;
 	private String credential_name;
 
 	private String credential_file_name;

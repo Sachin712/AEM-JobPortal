@@ -1,17 +1,14 @@
 package com.aem.project.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.transaction.Transactional;
 
 import org.hibernate.annotations.GenericGenerator;
-
+import org.springframework.security.core.GrantedAuthority;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,21 +16,28 @@ import lombok.NoArgsConstructor;
 @Transactional
 @Data
 @NoArgsConstructor
-@Table(name = "application_details")
-public class Application_Details {
+@Table(name = "authority")
+public class Authority implements GrantedAuthority {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8805388926798859568L;
+
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	@Column(name = "application_id")
-	private String applicationID;
-	private String application_status;
-
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "fk_applicant_appid", nullable = false)
+	private String id;
+	private String authority;
+	@ManyToOne(optional = false)
 	private Applicant applicant;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "fk_job_id", nullable = false)
-	private Job job;
+	public Authority(String authority) {
+		this.authority = authority;
+	}
 
+	@Override
+	public String getAuthority() {
+		// TODO Auto-generated method stub
+		return authority;
+	}
 }

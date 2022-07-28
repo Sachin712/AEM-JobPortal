@@ -1,6 +1,15 @@
+1. APPLICANT:
 Add a new applicant: POST - http://localhost:8080/applicants
 Get all applicants: GET - http://localhost:8080/applicants
 Get applicant DP by ID: GET - http://localhost:8080/applicants/profile/{applicant_ID}
 Update an applicant: PUT - http://localhost:8080/applicants/{applicant_ID}
+
+2. APPLICANT_CREDENTIAL:
 Add a credential for an applicant: POST - http://localhost:8080/applicants/{applicant_ID}/credentials
 Get all credentials for an applicant: GET - http://localhost:8080/applicants/{applicant_ID}/credentials
+
+3. JOB:
+Add a job: POST - http://localhost:8080/company/{company_ID}/jobs
+get all jobs for a companyID: GET - http://localhost:8080/company/{company_ID}/jobs
+Update a job: PUT - http://localhost:8080/job/{job_ID}
+Delete a job by jobID: DELETE - http://localhost:8080/job/{job_ID}

@@ -31,13 +31,13 @@ public class ApplicantService {
 	// Add a new applicant
 	public Applicant addApplicant(String applicant_name, String applicant_gender, String applicant_contact_details,
 			String applicant_email_address, String applicant_professional_summary,
-			String applicant_highest_educational_attainment, String applicant_username, String applicant_password,
+			String applicant_highest_educational_attainment, String username, String applicant_password,
 			String applicant_account_status, MultipartFile file) throws IOException {
 
 		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 		Applicant applicantData = new Applicant(applicant_name, applicant_gender, applicant_contact_details,
 				applicant_email_address, applicant_professional_summary, applicant_highest_educational_attainment,
-				applicant_username, applicant_password, applicant_account_status, fileName, file.getContentType(),
+				username, applicant_password, applicant_account_status, fileName, file.getContentType(),
 				file.getBytes());
 		return applicantRepo.save(applicantData);
 	}
@@ -50,9 +50,8 @@ public class ApplicantService {
 	// Updating an existing applicant
 	public Applicant updateApplicant(Optional<Applicant> applicantData, Applicant applicantInfo, String applicant_name,
 			String applicant_gender, String applicant_contact_details, String applicant_email_address,
-			String applicant_professional_summary, String applicant_highest_educational_attainment,
-			String applicant_username, String applicant_password, String applicant_account_status, MultipartFile file)
-			throws IOException {
+			String applicant_professional_summary, String applicant_highest_educational_attainment, String username,
+			String applicant_password, String applicant_account_status, MultipartFile file) throws IOException {
 		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
 		applicantInfo.setApplicant_name(applicant_name);
@@ -61,7 +60,7 @@ public class ApplicantService {
 		applicantInfo.setApplicant_email_address(applicant_email_address);
 		applicantInfo.setApplicant_professional_summary(applicant_professional_summary);
 		applicantInfo.setApplicant_highest_educational_attainment(applicant_highest_educational_attainment);
-		applicantInfo.setApplicant_username(applicant_username);
+		applicantInfo.setUsername(username);
 		applicantInfo.setApplicant_password(applicant_password);
 		applicantInfo.setApplicant_account_status(applicant_account_status);
 		applicantInfo.setApplicant_profile_image_name(fileName);

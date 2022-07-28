@@ -35,21 +35,20 @@ public class ApplicantController {
 	private ApplicantService applicationService;
 
 	// Create a new applicant
-	@PostMapping(value = "/applicants", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping("/applicants")
 	public ResponseFile addApplicants(@RequestParam(value = "applicant_name", required = false) String applicant_name,
 			@RequestParam(value = "applicant_gender", required = false) String applicant_gender,
 			@RequestParam(value = "applicant_contact_details", required = false) String applicant_contact_details,
 			@RequestParam(value = "applicant_email_address", required = false) String applicant_email_address,
 			@RequestParam(value = "applicant_professional_summary", required = false) String applicant_professional_summary,
 			@RequestParam(value = "applicant_highest_educational_attainment", required = false) String applicant_highest_educational_attainment,
-			@RequestParam(value = "applicant_username", required = false) String applicant_username,
+			@RequestParam(value = "username", required = false) String username,
 			@RequestParam(value = "applicant_password", required = false) String applicant_password,
 			@RequestParam(value = "applicant_account_status", required = false) String applicant_account_status,
 			@RequestParam(value = "file") MultipartFile file) throws IOException {
 		Applicant applicant = applicationService.addApplicant(applicant_name, applicant_gender,
 				applicant_contact_details, applicant_email_address, applicant_professional_summary,
-				applicant_highest_educational_attainment, applicant_username, applicant_password,
-				applicant_account_status, file);
+				applicant_highest_educational_attainment, username, applicant_password, applicant_account_status, file);
 		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/profile/")
 				.path(applicant.getId()).toUriString();
 
@@ -93,7 +92,7 @@ public class ApplicantController {
 			@RequestParam(value = "applicant_email_address", required = false) String applicant_email_address,
 			@RequestParam(value = "applicant_professional_summary", required = false) String applicant_professional_summary,
 			@RequestParam(value = "applicant_highest_educational_attainment", required = false) String applicant_highest_educational_attainment,
-			@RequestParam(value = "applicant_username", required = false) String applicant_username,
+			@RequestParam(value = "username", required = false) String username,
 			@RequestParam(value = "applicant_password", required = false) String applicant_password,
 			@RequestParam(value = "applicant_account_status", required = false) String applicant_account_status,
 			@RequestParam(value = "file") MultipartFile file) throws IOException {
@@ -103,8 +102,8 @@ public class ApplicantController {
 			Applicant applicantInfo = applicantData.get();
 			applicationService.updateApplicant(applicantData, applicantInfo, applicant_name, applicant_gender,
 					applicant_contact_details, applicant_email_address, applicant_professional_summary,
-					applicant_highest_educational_attainment, applicant_username, applicant_password,
-					applicant_account_status, file);
+					applicant_highest_educational_attainment, username, applicant_password, applicant_account_status,
+					file);
 			logger.info("Accessing put method... Applicant updated successfully.");
 			return ResponseEntity.ok("Applicant Updated!");
 
