@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.aem.project.entity.Applicant;
 import com.aem.project.entity.Applicant_Credential;
 import com.aem.project.repository.ApplicantRepository;
 import com.aem.project.repository.Applicant_CredentialRepository;

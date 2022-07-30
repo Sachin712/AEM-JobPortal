@@ -1,3 +1,8 @@
+
+0. LOGIN:
+POST - http://localhost:8080/api/auth/login
+
+
 1. APPLICANT:
 Add a new applicant: POST - http://localhost:8080/applicants
 Get all applicants: GET - http://localhost:8080/applicants

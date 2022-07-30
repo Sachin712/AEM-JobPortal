@@ -15,4 +15,8 @@ public class CustomPasswordEncoder {
 	public PasswordEncoder getPasswordEncoder() {
 		return passwordEncoder;
 	}
+
+	public String encryptPassword(String password) {
+		return passwordEncoder.encode(password);
+	}
 }
