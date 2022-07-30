@@ -16,9 +16,6 @@ import com.aem.project.util.CustomPasswordEncoder;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private CustomPasswordEncoder customPasswordEncoder;
-
-	@Autowired
 	private ApplicantRepository applicantRepo;
 
 	@Override

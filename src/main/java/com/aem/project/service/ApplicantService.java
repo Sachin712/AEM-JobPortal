@@ -11,12 +11,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.aem.project.entity.Applicant;
 import com.aem.project.repository.ApplicantRepository;
+import com.aem.project.util.CustomPasswordEncoder;
 
 @Service
 public class ApplicantService {
 
 	@Autowired
 	private ApplicantRepository applicantRepo;
+	@Autowired
+	private CustomPasswordEncoder encoder;
 
 	// Get applicant by ID
 	public Applicant getApplicant(String id) {
@@ -35,10 +38,10 @@ public class ApplicantService {
 			String applicant_account_status, MultipartFile file) throws IOException {
 
 		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+		String encodedPassword = encoder.encryptPassword(applicant_password);
 		Applicant applicantData = new Applicant(applicant_name, applicant_gender, applicant_contact_details,
 				applicant_email_address, applicant_professional_summary, applicant_highest_educational_attainment,
-				username, applicant_password, applicant_account_status, fileName, file.getContentType(),
-				file.getBytes());
+				username, encodedPassword, applicant_account_status, fileName, file.getContentType(), file.getBytes());
 		return applicantRepo.save(applicantData);
 	}
 
