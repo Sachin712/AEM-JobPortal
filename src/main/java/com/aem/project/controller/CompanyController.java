@@ -1,6 +1,7 @@
 package com.aem.project.controller;
 
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +35,7 @@ public class CompanyController {
 	private CompanyService companyService;
 	
 	//To add a new company
-	@PostMapping("/companies")
+	@PostMapping("/company")
 	public ResponseEntity<String> addUser(@RequestBody Company companyData) {
 		companyService.addCompany(companyData);
 		logger.info("Accessing post method... Company added successfully.");
@@ -43,33 +44,33 @@ public class CompanyController {
 	}
 
 	// Get all companies
-	@GetMapping("/companies")
+	@GetMapping("/company")
 	public List<Company> getCompany() {
 		return companyService.getAllcompanies();
 	}
 
 	// Get companies by Id
-	@GetMapping("/companies/{id}")
+	@GetMapping("/company/{id}")
 	public Optional<Company> getCompanies(@PathVariable String id) {
 		return companyService.findById(id);
 	}
 
 	//Update a company info
-	@PutMapping("/companies/{id}")
-	public ResponseEntity<String> updateCompany(@PathVariable String id, @RequestBody Company company) {
+	@PutMapping("/company/{id}")
+	public ResponseEntity<String> updateCompany(@PathVariable String id, @RequestBody Company company) throws IOException {
 		Optional<Company> companyData = companyService.findById(id);
 		if (companyData.isPresent()) {
 			Company companyInfo = companyData.get();
-			companyInfo.setCompany_name(company.getCompany_name());
-			companyInfo.setCompany_address(company.getCompany_address());
-			companyInfo.setCompany_contact(company.getCompany_contact());
-			companyInfo.setCompany_email(company.getCompany_email());
-			companyInfo.setCompany_website(company.getCompany_website());
-			companyInfo.setUsername(company.getUsername());
-			companyInfo.setPassword(company.getPassword());			
-			companyInfo.setAccount_status(company.getAccount_status());
+//			companyInfo.setCompany_name(company.getCompany_name());
+//			companyInfo.setCompany_address(company.getCompany_address());
+//			companyInfo.setCompany_contact(company.getCompany_contact());
+//			companyInfo.setCompany_email(company.getCompany_email());
+//			companyInfo.setCompany_website(company.getCompany_website());
+//			companyInfo.setUsername(company.getUsername());
+//			companyInfo.setPassword(company.getPassword());			
+//			companyInfo.setAccount_status(company.getAccount_status());
 
-		companyService.addCompany(companyInfo);
+		companyService.updateCompany(companyInfo,company);
 			logger.info("Accessing put method... Company updated successfully.");
 			return ResponseEntity.ok("Company Updated!");
 		} else

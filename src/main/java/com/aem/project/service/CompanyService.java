@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.aem.project.entity.Company;
 import com.aem.project.repository.CompanyRepository;
+import com.aem.project.util.CustomPasswordEncoder;
 
 @Service
 public class CompanyService {
@@ -16,6 +17,9 @@ public class CompanyService {
 	@Autowired
 	private CompanyRepository companyRepo;
 
+	@Autowired
+	private CustomPasswordEncoder encoder;
+	
 	// Get company by ID
 	public Company getCompany(String company_id) {
 		return companyRepo.findById(company_id).orElseThrow();
@@ -32,22 +36,20 @@ public class CompanyService {
 	}
 
 	// Updating an existing company
-	public Company updateCompany(Optional<Company> companyData, Company companyInfo, String company_name,
-			String company_address, String company_contact, String company_email, String company_website,
-			String username, String password, String account_status) throws IOException {
+	public Company updateCompany(Company companyData, Company companyInfo) throws IOException {
 
-		companyInfo.setCompany_name(company_name);
-		companyInfo.setCompany_address(company_address);
-		companyInfo.setCompany_contact(company_contact);
-		companyInfo.setCompany_email(company_email);
-		companyInfo.setCompany_website(company_website);
-		companyInfo.setUsername(username);
-		companyInfo.setPassword(password);
-		companyInfo.setAccount_status(account_status);
-
+		companyInfo.setCompany_name(companyData.getCompany_name());
+		companyInfo.setCompany_address(companyData.getCompany_address());
+		companyInfo.setCompany_contact(companyData.getCompany_contact());
+		companyInfo.setCompany_email(companyData.getCompany_email());
+		companyInfo.setCompany_website(companyData.getCompany_website());
+		companyInfo.setUsername(companyData.getUsername());
+		String encodedPassword = encoder.encryptPassword(companyData.getPassword());
+		companyInfo.setPassword(encodedPassword);
+		companyInfo.setAccount_status(companyData.getAccount_status());
 		return companyRepo.save(companyInfo);
 
-	}
+	}	
 
 	// Accessing findById for getting an company info
 	public Optional<Company> getCompanyById(String company_id) {
@@ -56,7 +58,17 @@ public class CompanyService {
 
 	// Accessing companydata for adding a company
 	public Company addCompany(Company companyData) {
-		return companyRepo.save(companyData);
+		Company companyInfo = new Company();
+		companyInfo.setCompany_name(companyData.getCompany_name());
+		companyInfo.setCompany_address(companyData.getCompany_address());
+		companyInfo.setCompany_contact(companyData.getCompany_contact());
+		companyInfo.setCompany_email(companyData.getCompany_email());
+		companyInfo.setCompany_website(companyData.getCompany_website());
+		companyInfo.setUsername(companyData.getUsername());
+		String encodedPassword = encoder.encryptPassword(companyData.getPassword());
+		companyInfo.setPassword(encodedPassword);
+		companyInfo.setAccount_status(companyData.getAccount_status());
+		return companyRepo.save(companyInfo);
 
 	}
 

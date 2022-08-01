@@ -67,6 +67,14 @@ public class JobController {
 	public Optional<Job> findJobById(@PathVariable("id") String id) {
 		return jobService.findJobById(id);
 	}
+	
+	// Get all jobs
+	@GetMapping("/jobs")
+	public List<Job> getJobs() {
+
+		return jobService.getJobs();
+		
+	}
 
 	// Update a job
 	@PutMapping("/job/{id}")
