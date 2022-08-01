@@ -58,14 +58,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// Set permissions on endpoints
 		http.authorizeRequests()
 				// Our public endpoints
-				.antMatchers("/api/auth/**").permitAll()
-				.antMatchers("/applicants/**").permitAll()
-				.antMatchers("/add/**").permitAll()
-				.antMatchers("/credentials/**").permitAll()
-				.anyRequest().authenticated();
+				.antMatchers("/v3/api-docs", "/swagger-resources/**", "/webjars/**", "/swagger-ui.html/**", "/swagger-ui/**").permitAll()
+				.antMatchers("/applicants/**").permitAll().antMatchers("/add/**").permitAll()
+				.antMatchers("/credentials/**").permitAll().anyRequest().authenticated();
 
 		// Add JWT token filter
 		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 	}
-
 }
