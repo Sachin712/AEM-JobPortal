@@ -32,15 +32,13 @@ public class AdminService {
 	}
 
 	// Updating an existing admin
-	public Admin updateAdmin(Optional<Admin> adminData, Admin adminInfo, String admin_name, String admin_contact,
-			String admin_email, String admin_username, String admin_password) throws IOException {
+	public Admin updateAdmin(Admin adminInfo, Admin admin) throws IOException {
 
-		adminInfo.setAdmin_name(admin_name);
-		adminInfo.setAdmin_contact(admin_contact);
-		adminInfo.setAdmin_email(admin_email);
-		adminInfo.setAdmin_username(admin_username);
-		adminInfo.setAdmin_password(admin_password);
-
+		adminInfo.setAdmin_name(admin.getAdmin_name());
+		adminInfo.setAdmin_contact(admin.getAdmin_contact());
+		adminInfo.setAdmin_email(admin.getAdmin_email());
+		adminInfo.setAdmin_password(admin.getAdmin_password());
+		adminInfo.setAdmin_username(admin.getAdmin_username());
 		return adminRepo.save(adminInfo);
 	}
 

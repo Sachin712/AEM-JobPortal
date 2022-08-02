@@ -36,11 +36,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
 		// Get auth header and validate
 		final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+
 		if (!StringUtils.hasText(header) || (StringUtils.hasText(header) && !header.startsWith("Bearer "))) {
 			chain.doFilter(request, response);
 			return;
 		}
-
+//		
 		final String token = header.split(" ")[1].trim();
 
 		// Get user id and set it to spring context

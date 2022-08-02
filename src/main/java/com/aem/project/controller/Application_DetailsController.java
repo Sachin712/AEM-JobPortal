@@ -21,12 +21,10 @@ import lombok.extern.log4j.Log4j;
 @CrossOrigin(origins = "http://localhost:3000")
 @Log4j
 public class Application_DetailsController {
-
-//	private static final Logger logger = Logger.getLogger(ApplicantController.class);
-
 	@Autowired
 	Application_DetailsService app_DetailsService;
 
+	// Add a new application detail
 	@PostMapping("/appdetails")
 	public ResponseEntity<String> addApplicationDetails(@RequestBody Application_Details appDetails) {
 
@@ -35,10 +33,11 @@ public class Application_DetailsController {
 
 		return ResponseEntity.ok("Application Detail added");
 	}
-	
+
+	// Get all application details (TODO)
 	@GetMapping("/appdetails")
-	public ResponseEntity<List<Application_Details>> getAllApplicationDetails(){
+	public ResponseEntity<List<Application_Details>> getAllApplicationDetails() {
 		return null;
-		
+
 	}
 }

@@ -6,14 +6,16 @@ import java.util.Optional;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,10 +25,12 @@ import com.aem.project.entity.Applicant_Credential;
 import com.aem.project.service.ApplicantService;
 import com.aem.project.service.Applicant_CredentialService;
 
+import lombok.extern.log4j.Log4j;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
+@Log4j
 public class Applicant_CredentialController {
-	private static final Logger logger = Logger.getLogger(ApplicantController.class);
 
 	@Autowired
 	private Applicant_CredentialService applicant_CredentialService;
@@ -35,21 +39,26 @@ public class Applicant_CredentialController {
 
 	// Create a new credential
 	@PostMapping("/applicants/{applicantID}/credentials")
-	public ResponseEntity<String> addCredential(@PathVariable("applicantID") String applicantID,
-			@RequestParam("credential_name") String credential_name, @RequestParam(value = "file") MultipartFile file)
-			throws IOException {
+	public ResponseEntity<?> addCredential(@PathVariable("applicantID") String applicantID,
+			@RequestParam("credential_name") String credential_name, @RequestParam(value = "file") MultipartFile file,
+			@RequestHeader(HttpHeaders.AUTHORIZATION) String token) throws IOException {
 
-		Optional<Applicant> applicantData = applicationService.findById(applicantID);
-		if (applicantData.isPresent()) {
-			applicant_CredentialService.addCredential(applicantID, credential_name, file);
-			logger.info("Accessing post method... New Credenital created");
+		String tempToken = token.split(" ")[0].trim();
+		if (token.isEmpty() || token.equals(null) || !tempToken.equals("Bearer"))
+			return new ResponseEntity<String>("Token null or empty", HttpStatus.UNAUTHORIZED);
+		else {
 
-			return ResponseEntity.ok("Credenital Added!");
-		} else {
-			new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			return ResponseEntity.ok("Applicant not found");
+			Optional<Applicant> applicantData = applicationService.findById(applicantID);
+			if (applicantData.isPresent()) {
+				applicant_CredentialService.addCredential(applicantID, credential_name, file);
+				log.info("Accessing post method... New Credenital created");
+
+				return ResponseEntity.ok("Credenital Added!");
+			} else {
+				new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				return ResponseEntity.ok("Applicant not found");
+			}
 		}
-
 	}
 
 	// Get all credentials
@@ -61,7 +70,7 @@ public class Applicant_CredentialController {
 		if (applicantData.isPresent()) {
 			List<Applicant_Credential> applicant_Credentials = applicant_CredentialService
 					.getAllCredentials(applicantID);
-			logger.info("Accessing get method... Credenitals found");
+			log.info("Accessing get method... Credenitals found");
 
 			return new ResponseEntity<>(applicant_Credentials, HttpStatus.OK);
 		} else {
@@ -80,24 +89,48 @@ public class Applicant_CredentialController {
 	// Update a credential
 	@PutMapping("/credentials/{id}")
 	public ResponseEntity<String> updateCredential(@PathVariable("id") String id,
-			@RequestParam("credential_name") String credential_name, @RequestParam(value = "file") MultipartFile file) {
+			@RequestParam("credential_name") String credential_name, @RequestParam(value = "file") MultipartFile file,
+			@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		String tempToken = token.split(" ")[0].trim();
+		if (token.isEmpty() || token.equals(null) || !tempToken.equals("Bearer"))
+			return new ResponseEntity<String>("Token null or empty", HttpStatus.UNAUTHORIZED);
+		else {
 
-		Optional<Applicant_Credential> credentialData = applicant_CredentialService.getCredentialById(id);
-		if (credentialData.isPresent()) {
-			Applicant_Credential credentialInfo = credentialData.get();
-			try {
-				applicant_CredentialService.updateCredential(credentialData, credentialInfo, credential_name, file);
-				logger.info("Accessing put method... Credential updated successully.");
-				return ResponseEntity.ok("Credential Updated");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			Optional<Applicant_Credential> credentialData = applicant_CredentialService.getCredentialById(id);
+			if (credentialData.isPresent()) {
+				Applicant_Credential credentialInfo = credentialData.get();
+				try {
+					applicant_CredentialService.updateCredential(credentialData, credentialInfo, credential_name, file);
+					log.info("Accessing put method... Credential updated successully.");
+					return ResponseEntity.ok("Credential Updated");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+			} else {
+				new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				return ResponseEntity.ok("Credential not found.");
 			}
-		} else {
-			new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			return ResponseEntity.ok("Credential not found.");
 		}
+	}
 
+	@DeleteMapping("/admins/{id}")
+	public ResponseEntity<?> deleteCredential(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+			@PathVariable String id) {
+		String tempToken = token.split(" ")[0].trim();
+		if (token.isEmpty() || token.equals(null) || !tempToken.equals("Bearer"))
+			return new ResponseEntity<String>("Token null or empty", HttpStatus.UNAUTHORIZED);
+		else {
+
+			Optional<Applicant_Credential> credentialInfo = applicant_CredentialService.getCredentialById(id);
+			if (credentialInfo.isPresent()) {
+				applicant_CredentialService.deleteCredential(id);
+				log.info("Accessing delete method... Credential deleted successully.");
+				return new ResponseEntity<String>("Credential Deleted!", HttpStatus.OK);
+			} else
+				return new ResponseEntity<String>("No Credential found!", HttpStatus.NOT_FOUND);
+
+		}
 	}
 }

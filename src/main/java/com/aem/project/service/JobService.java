@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.aem.project.entity.Job;
@@ -61,6 +62,11 @@ public class JobService {
 		// TODO Auto-generated method stub
 		jobRepository.deleteById(id);
 		return;
+	}
+
+	public List<Job> getJobs() {
+		// TODO Auto-generated method stub
+		return  jobRepository.findAll();
 	}
 
 }

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,11 +25,12 @@ import com.aem.project.entity.Applicant;
 import com.aem.project.entity.ResponseFile;
 import com.aem.project.service.ApplicantService;
 
+import lombok.extern.log4j.Log4j;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
+@Log4j
 public class ApplicantController {
-	private static final Logger logger = Logger.getLogger(ApplicantController.class);
-
 	@Autowired
 	private ApplicantService applicationService;
 
@@ -53,7 +52,7 @@ public class ApplicantController {
 		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/profile/")
 				.path(applicant.getId()).toUriString();
 
-		logger.info("Accessing put method... New applicant created");
+		log.info("Accessing post method... New applicant created");
 		return new ResponseFile(applicant.getApplicant_profile_image_name(), fileDownloadUri,
 				applicant.getApplicant_profile_image_type(), applicant.getApplicant_profile_image().length);
 
@@ -105,7 +104,7 @@ public class ApplicantController {
 					applicant_contact_details, applicant_email_address, applicant_professional_summary,
 					applicant_highest_educational_attainment, username, applicant_password, applicant_account_status,
 					file);
-			logger.info("Accessing put method... Applicant updated successfully.");
+			log.info("Accessing put method... Applicant updated successfully.");
 			return ResponseEntity.ok("Applicant Updated!");
 
 		} else {

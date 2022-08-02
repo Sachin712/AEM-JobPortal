@@ -65,4 +65,11 @@ public class Applicant_CredentialService {
 
 	}
 
+	public void deleteCredential(String id) {
+		// TODO Auto-generated method stub
+		applicant_CredentialRepo.deleteById(id);
+		return;
+
+	}
+
 }

@@ -1,10 +1,9 @@
 package com.aem.project.controller;
 
-
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
@@ -15,29 +14,29 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.http.HttpHeaders;
 
 import com.aem.project.entity.Admin;
 
-
 import com.aem.project.service.AdminService;
 
+import lombok.extern.log4j.Log4j;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
+@Log4j
 public class AdminController {
-	private static final Logger logger = Logger.getLogger(AdminController.class);
 
 	@Autowired
 	private AdminService adminService;
-	
-	//To add a new admin
+
+	// To add a new admin
 	@PostMapping("/admins")
 	public ResponseEntity<String> addUser(@RequestBody Admin adminData) {
 		adminService.addAdmin(adminData);
-		logger.info("Accessing post method... Admin added successfully.");
+		log.info("Accessing post method... Admin added successfully.");
 		return ResponseEntity.ok("Admin added!");
 
 	}
@@ -56,24 +55,25 @@ public class AdminController {
 
 	// Updating admin info
 	@PutMapping("/admins/{id}")
-	public ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody Admin admin) {
-		Optional<Admin> adminData = adminService.findById(id);
-		if (adminData.isPresent()) {
-			Admin adminInfo = adminData.get();
-		adminInfo.setAdmin_name(admin.getAdmin_name());
-		adminInfo.setAdmin_contact(admin.getAdmin_contact());
-		adminInfo.setAdmin_email(admin.getAdmin_email());
-		adminInfo.setAdmin_password(admin.getAdmin_password());
-		adminInfo.setAdmin_username(admin.getAdmin_username());
+	public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody Admin admin,
+			@RequestHeader(HttpHeaders.AUTHORIZATION) String token) throws IOException {
 
-			adminService.addAdmin(adminInfo);
-			logger.info("Accessing put method... Admin updated successfully.");
-			return ResponseEntity.ok("Admin Updated!");
-		} else
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		String tempToken = token.split(" ")[0].trim();
+		if (token.isEmpty() || token.equals(null) || !tempToken.equals("Bearer"))
+			return new ResponseEntity<String>("Token null or empty", HttpStatus.UNAUTHORIZED);
+		else {
 
+			
+			Optional<Admin> adminData = adminService.findById(id);
+			if (adminData.isPresent()) {
+				Admin adminInfo = adminData.get();
+				Admin updateAdmin = adminService.updateAdmin(adminInfo, admin);
+				log.info("Accessing put method... Admin updated successfully.");
+				return new ResponseEntity<>(updateAdmin, HttpStatus.OK);
+			} else
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+		}
 	}
-
-
 
 }
