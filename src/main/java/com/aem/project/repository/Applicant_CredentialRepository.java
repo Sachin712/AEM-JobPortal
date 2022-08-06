@@ -8,4 +8,5 @@ import com.aem.project.entity.Applicant_Credential;
 
 public interface Applicant_CredentialRepository extends JpaRepository<Applicant_Credential, String> {
 	List<Applicant_Credential> findByApplicantId(String applicantID);
+	Applicant_Credential findByDocument(String docName);
 }

@@ -29,7 +29,7 @@ public class Applicant_Credential {
 	private String id;
 	private String credential_name;
 
-	private String credential_file_name;
+	private String document;
 	private String credential_file_type;
 	@Lob
 	private byte[] file_upload;
@@ -38,10 +38,10 @@ public class Applicant_Credential {
 	@JoinColumn(name = "fk_applicant_appid", nullable = false)
 	private Applicant applicant;
 
-	public Applicant_Credential(String credential_name, String credential_file_name, String credential_file_type,
+	public Applicant_Credential(String credential_name, String document, String credential_file_type,
 			byte[] file_upload) {
 		this.credential_name = credential_name;
-		this.credential_file_name = credential_file_name;
+		this.document = document;
 		this.credential_file_type = credential_file_type;
 		this.file_upload = file_upload;
 	}

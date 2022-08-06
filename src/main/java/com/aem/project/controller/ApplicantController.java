@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,6 +50,7 @@ public class ApplicantController {
 		Applicant applicant = applicationService.addApplicant(applicant_name, applicant_gender,
 				applicant_contact_details, applicant_email_address, applicant_professional_summary,
 				applicant_highest_educational_attainment, username, applicant_password, applicant_account_status, file);
+		
 		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/profile/")
 				.path(applicant.getId()).toUriString();
 
@@ -95,23 +97,34 @@ public class ApplicantController {
 			@RequestParam(value = "username", required = false) String username,
 			@RequestParam(value = "applicant_password", required = false) String applicant_password,
 			@RequestParam(value = "applicant_account_status", required = false) String applicant_account_status,
-			@RequestParam(value = "file") MultipartFile file) throws IOException {
+			@RequestParam(value = "file") MultipartFile file,
+			@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		String tempToken = token.split(" ")[0].trim();
+		if (token.isEmpty() || token.equals(null) || !tempToken.equals("Bearer"))
+			return new ResponseEntity<String>("Token null or empty", HttpStatus.UNAUTHORIZED);
+		else {
 
-		Optional<Applicant> applicantData = applicationService.findById(id);
-		if (applicantData.isPresent()) {
-			Applicant applicantInfo = applicantData.get();
-			applicationService.updateApplicant(applicantData, applicantInfo, applicant_name, applicant_gender,
-					applicant_contact_details, applicant_email_address, applicant_professional_summary,
-					applicant_highest_educational_attainment, username, applicant_password, applicant_account_status,
-					file);
-			log.info("Accessing put method... Applicant updated successfully.");
-			return ResponseEntity.ok("Applicant Updated!");
+			Optional<Applicant> applicantData = applicationService.findById(id);
+			if (applicantData.isPresent()) {
+				Applicant applicantInfo = applicantData.get();
+				try {
+					applicationService.updateApplicant(applicantData, applicantInfo, applicant_name, applicant_gender,
+							applicant_contact_details, applicant_email_address, applicant_professional_summary,
+							applicant_highest_educational_attainment, username, applicant_password,
+							applicant_account_status, file);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				log.info("Accessing put method... Applicant updated successfully.");
+				return ResponseEntity.ok("Applicant Updated!");
 
-		} else {
-			new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			return ResponseEntity.ok("Applicant not found");
+			} else {
+				new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				return ResponseEntity.ok("Applicant not found");
+			}
+
 		}
-
 	}
 
 }

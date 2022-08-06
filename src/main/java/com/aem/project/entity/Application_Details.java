@@ -27,6 +27,7 @@ public class Application_Details {
 	@Column(name = "application_id")
 	private String applicationID;
 	private String application_status;
+	private String application_doc;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "fk_applicant_appid", nullable = false)
