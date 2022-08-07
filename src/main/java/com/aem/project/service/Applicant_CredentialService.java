@@ -26,16 +26,14 @@ public class Applicant_CredentialService {
 	private ApplicantRepository applicantRepo;
 
 	// Add a new credential
-	public Applicant_Credential addCredential(String applicantID, String credential_name, MultipartFile file)
-			throws IOException {
+	public Applicant_Credential addCredential(String applicantID, MultipartFile file) throws IOException {
 
-		String temp = "";
+		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
-//		String fileName = ServletUriComponentsBuilder.fromCurrentContextPath().path("/doc/").path(credential_name)
-//				.toUriString();
+		String docURL = "xx";
 
-		Applicant_Credential applicant_Credential = new Applicant_Credential(credential_name, temp,
-				file.getContentType(), file.getBytes());
+		Applicant_Credential applicant_Credential = new Applicant_Credential(fileName, docURL, file.getContentType(),
+				file.getBytes());
 
 		// applicant_Credential.setCredential_file_name(fileName);
 
@@ -47,7 +45,7 @@ public class Applicant_CredentialService {
 
 	}
 
-	// Get all credentials
+	// Get all credentials for an applicant
 	public List<Applicant_Credential> getAllCredentials(String applicantID) {
 		return applicant_CredentialRepo.findByApplicantId(applicantID);
 		// TODO Auto-generated method stub
@@ -56,7 +54,7 @@ public class Applicant_CredentialService {
 
 	public Applicant_Credential getCredentialById(String id) {
 		// TODO Auto-generated method stub
-		return applicant_CredentialRepo.findById(id).orElseThrow();
+		return applicant_CredentialRepo.findById(id).get();
 	}
 
 	public Applicant_Credential updateCredential(Optional<Applicant_Credential> credentialData,
@@ -78,11 +76,6 @@ public class Applicant_CredentialService {
 		applicant_CredentialRepo.deleteById(id);
 		return;
 
-	}
-
-	public Applicant_Credential getDoc(String docName) {
-		// TODO Auto-generated method stub
-		return applicant_CredentialRepo.findByDocument(docName);
 	}
 
 	public Applicant_Credential setDoc(Applicant_Credential appCred) {

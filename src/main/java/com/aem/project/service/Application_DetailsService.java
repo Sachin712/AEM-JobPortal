@@ -1,6 +1,9 @@
 package com.aem.project.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -31,6 +34,21 @@ public class Application_DetailsService {
 		appD.setApplication_doc(appDetails.getApplication_doc());
 
 		return app_DetailsRepository.save(appD);
+	}
+
+	public Application_Details getApplicationDetailById(String appDetailId) {
+		// TODO Auto-generated method stub
+		return app_DetailsRepository.findById(appDetailId).get();
+	}
+
+	public List<Application_Details> getApplicationDetails() {
+		// TODO Auto-generated method stub
+		return app_DetailsRepository.findAll();
+	}
+
+	public List<Application_Details> getAllApplications(String applicantId) {
+		// TODO Auto-generated method stub
+		return app_DetailsRepository.findByApplicantId(applicantId);
 	}
 
 }

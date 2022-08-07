@@ -37,4 +37,8 @@ public class Application_Details {
 	@JoinColumn(name = "fk_job_id", nullable = false)
 	private Job job;
 
+//	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+//	@JoinColumn(name = "application_docURL", referencedColumnName = "document", nullable = false)
+//	private Applicant_Credential applicant_Credential;
+
 }

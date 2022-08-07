@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aem.project.entity.Applicant;
+import com.aem.project.entity.Applicant_Credential;
 import com.aem.project.entity.Application_Details;
 import com.aem.project.entity.Job;
 import com.aem.project.service.ApplicantService;
@@ -37,6 +38,9 @@ public class Application_DetailsController {
 	@Autowired
 	JobService jobService;
 
+	@Autowired
+	private ApplicantService applicationService;
+
 	// Add a new application detail
 	@PostMapping("/appdetails/{app_id}/{job_id}")
 	public ResponseEntity<?> addApplicationDetails(@PathVariable String app_id, @PathVariable String job_id,
@@ -54,19 +58,32 @@ public class Application_DetailsController {
 			Application_Details appDetails = app_DetailsService.addApplicationDetails(appData, jobData,
 					application_Details);
 
+			log.info("Accessing post method... New application detail added");
 			return new ResponseEntity<>(appDetails, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("Application Detail not found", HttpStatus.NOT_FOUND);
 
 		}
-		// app_DetailsService.addApplicationDetails(appDetails);
-		// log.info("Accessing post method... New application detail added");
 	}
 
-	// Get all application details (TODO)
+	// Get all application details
 	@GetMapping("/appdetails")
-	public ResponseEntity<List<Application_Details>> getAllApplicationDetails() {
-		return null;
+	public List<Application_Details> getAllApplicationDetails() {
+		return app_DetailsService.getApplicationDetails();
+	}
+
+	// Get all application details for an applicant
+	@GetMapping("/appdetails/{applicantId}")
+	public ResponseEntity<?> getAllApplicationDetailsById(@PathVariable String applicantId) {
+
+		Optional<Applicant> applicantData = applicationService.findById(applicantId);
+
+		if (applicantData.isPresent()) {
+			List<Application_Details> appDetails = app_DetailsService.getAllApplications(applicantId);
+
+			return new ResponseEntity<>(appDetails, HttpStatus.OK);
+		} else
+			return new ResponseEntity<>("No Data Found", HttpStatus.NOT_FOUND);
 
 	}
 }

@@ -47,31 +47,29 @@ public class Applicant_CredentialController {
 	// Create a new credential
 	@PostMapping("/applicants/{applicantID}/credentials")
 	public ResponseFile addCredential(@PathVariable("applicantID") String applicantID,
-			@RequestParam("credential_name") String credential_name, @RequestParam(value = "file") MultipartFile file,
-			@RequestHeader(HttpHeaders.AUTHORIZATION) String token) throws IOException {
+			@RequestParam(value = "file") MultipartFile file, @RequestHeader(HttpHeaders.AUTHORIZATION) String token)
+			throws IOException {
 
 		String tempToken = token.split(" ")[0].trim();
 		if (!token.isEmpty() || !token.equals(null) || tempToken.equals("Bearer")) {
 
 			Optional<Applicant> applicantData = applicationService.findById(applicantID);
 			if (applicantData.isPresent()) {
-				Applicant_Credential appCred = applicant_CredentialService.addCredential(applicantID, credential_name,
-						file);
+				Applicant_Credential appCred = applicant_CredentialService.addCredential(applicantID, file);
 
-				String fileName = ServletUriComponentsBuilder.fromCurrentContextPath().path("/doc/")
+				String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/doc/")
 						.path(appCred.getId()).toUriString();
-				appCred.setDocument(fileName);
+
+				appCred.setDocument(fileDownloadUri);
 
 				applicant_CredentialService.setDoc(appCred);
 
 				log.info("Accessing post method... New Credenital created");
 
-				resFile = new ResponseFile(appCred.getCredential_name(), fileName, appCred.getCredential_file_type(),
-						appCred.getFile_upload().length);
-				// setDocName(appCred);
+				resFile = new ResponseFile(appCred.getCredential_name(), appCred.getDocument(),
+						appCred.getCredential_file_type(), appCred.getFile_upload().length);
 
 				return resFile;
-				// new ResponseEntity<String>("done", HttpStatus.OK);
 
 			}
 		}
@@ -91,20 +89,18 @@ public class Applicant_CredentialController {
 
 	// Get document download link
 	@GetMapping("/doc/{credId}")
-	public ResponseEntity<?> downloadFile(@PathVariable String credId) {
+	public ResponseEntity<byte[]> downloadFile(@PathVariable String credId) {
 		// Load file from database
 
 		Applicant_Credential app_Credential = applicant_CredentialService.getCredentialById(credId);
 
-		return ResponseEntity.ok().contentType(MediaType.parseMediaType(app_Credential.getCredential_file_type()))
+		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION,
-						"attachment; filename=\"" + app_Credential.getDocument() + "\"")
-				.body(new ByteArrayResource(app_Credential.getFile_upload()));
-//		} else
-//			return new ResponseEntity<>("No document found!!", HttpStatus.NOT_FOUND);
+						"attachment; filename=\"" + app_Credential.getCredential_name() + "\"")
+				.body(app_Credential.getFile_upload());
 	}
 
-	// Get all credentials
+	// Get all credentials for an applicant
 	@GetMapping("/applicants/{applicantID}/credentials")
 	public ResponseEntity<List<Applicant_Credential>> getAllCredentials(
 			@PathVariable("applicantID") String applicantID) {
