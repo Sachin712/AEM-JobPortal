@@ -23,7 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.aem.project.entity.Applicant;
+import com.aem.project.entity.Authority;
 import com.aem.project.entity.ResponseFile;
+import com.aem.project.repository.AuthorityRepository;
 import com.aem.project.service.ApplicantService;
 
 import lombok.extern.log4j.Log4j;
@@ -34,6 +36,9 @@ import lombok.extern.log4j.Log4j;
 public class ApplicantController {
 	@Autowired
 	private ApplicantService applicationService;
+
+	@Autowired
+	private AuthorityRepository authorityRepo;
 
 	// Create a new applicant
 	@PostMapping("/applicants")
@@ -50,7 +55,13 @@ public class ApplicantController {
 		Applicant applicant = applicationService.addApplicant(applicant_name, applicant_gender,
 				applicant_contact_details, applicant_email_address, applicant_professional_summary,
 				applicant_highest_educational_attainment, username, applicant_password, applicant_account_status, file);
-		
+
+		Authority authority = new Authority();
+		authority.setAuthority("ROLE_APPLICANT");
+		authority.setApplicant(applicant);
+
+		authorityRepo.save(authority);
+
 		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/profile/")
 				.path(applicant.getId()).toUriString();
 
@@ -82,7 +93,7 @@ public class ApplicantController {
 	// Get applicant by Id
 	@GetMapping("/applicants/{id}")
 	public Optional<Applicant> getApplicants(@PathVariable String id) {
-		return applicationService.getApplicantById(id);
+		return applicationService.findById(id);
 	}
 
 	// Update an existing applicant
@@ -97,8 +108,7 @@ public class ApplicantController {
 			@RequestParam(value = "username", required = false) String username,
 			@RequestParam(value = "applicant_password", required = false) String applicant_password,
 			@RequestParam(value = "applicant_account_status", required = false) String applicant_account_status,
-			@RequestParam(value = "file") MultipartFile file,
-			@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+			@RequestParam(value = "file") MultipartFile file, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 		String tempToken = token.split(" ")[0].trim();
 		if (token.isEmpty() || token.equals(null) || !tempToken.equals("Bearer"))
 			return new ResponseEntity<String>("Token null or empty", HttpStatus.UNAUTHORIZED);

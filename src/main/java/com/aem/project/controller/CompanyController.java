@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.aem.project.entity.Applicant;
 import com.aem.project.entity.Company;
 import com.aem.project.service.CompanyService;
 
@@ -32,13 +34,11 @@ public class CompanyController {
 	// To add a new company
 	@PostMapping("/company")
 	public ResponseEntity<String> addUser(@RequestBody Company companyData,
-			@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+			@AuthenticationPrincipal Applicant applicant) {
 
-		String tempToken = token.split(" ")[0].trim();
-		if (token.isEmpty() || token.equals(null) || !tempToken.equals("Bearer"))
+		if (applicant == null)
 			return new ResponseEntity<String>("Token null or empty", HttpStatus.UNAUTHORIZED);
 		else {
-
 			companyService.addCompany(companyData);
 			log.info("Accessing post method... Company added successfully.");
 			return ResponseEntity.ok("Company added!");
@@ -59,11 +59,10 @@ public class CompanyController {
 
 	// Update a company info
 	@PutMapping("/company/{id}")
-	public ResponseEntity<?> updateCompany(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-			@PathVariable String id, @RequestBody Company company) throws IOException {
+	public ResponseEntity<?> updateCompany(@AuthenticationPrincipal Applicant applicant, @PathVariable String id,
+			@RequestBody Company company) throws IOException {
 
-		String tempToken = token.split(" ")[0].trim();
-		if (token.isEmpty() || token.equals(null) || !tempToken.equals("Bearer"))
+		if (applicant == null)
 			return new ResponseEntity<String>("Token null or empty", HttpStatus.UNAUTHORIZED);
 		else {
 

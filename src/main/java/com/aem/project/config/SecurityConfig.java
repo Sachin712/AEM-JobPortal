@@ -18,6 +18,7 @@ import com.aem.project.util.CustomPasswordEncoder;
 
 @SuppressWarnings("deprecation")
 @EnableWebSecurity
+
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired

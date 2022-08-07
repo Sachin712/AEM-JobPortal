@@ -25,17 +25,15 @@ public class Applicant_CredentialService {
 	@Autowired
 	private ApplicantRepository applicantRepo;
 
+	private String docURL = "xx";
+
 	// Add a new credential
 	public Applicant_Credential addCredential(String applicantID, MultipartFile file) throws IOException {
 
 		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
-		String docURL = "xx";
-
 		Applicant_Credential applicant_Credential = new Applicant_Credential(fileName, docURL, file.getContentType(),
 				file.getBytes());
-
-		// applicant_Credential.setCredential_file_name(fileName);
 
 		Applicant_Credential applicant_Credential2 = applicantRepo.findById(applicantID).map(app -> {
 			applicant_Credential.setApplicant(app);
@@ -48,22 +46,18 @@ public class Applicant_CredentialService {
 	// Get all credentials for an applicant
 	public List<Applicant_Credential> getAllCredentials(String applicantID) {
 		return applicant_CredentialRepo.findByApplicantId(applicantID);
-		// TODO Auto-generated method stub
-
 	}
 
 	public Applicant_Credential getCredentialById(String id) {
-		// TODO Auto-generated method stub
 		return applicant_CredentialRepo.findById(id).get();
 	}
 
-	public Applicant_Credential updateCredential(Optional<Applicant_Credential> credentialData,
-			Applicant_Credential credentialInfo, String credential_name, MultipartFile file) throws IOException {
-		// TODO Auto-generated method stub
+	public Applicant_Credential updateCredential(Applicant_Credential credentialInfo, MultipartFile file)
+			throws IOException {
 		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
-		credentialInfo.setCredential_name(credential_name);
-		credentialInfo.setDocument(fileName);
+		credentialInfo.setCredential_name(fileName);
+		credentialInfo.setDocument(docURL);
 		credentialInfo.setCredential_file_type(file.getContentType());
 		credentialInfo.setFile_upload(file.getBytes());
 

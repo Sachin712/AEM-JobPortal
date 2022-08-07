@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpHeaders;
 
+import com.aem.project.entity.Applicant;
 import com.aem.project.entity.Company;
 import com.aem.project.entity.Job;
 import com.aem.project.service.CompanyService;
@@ -36,11 +38,10 @@ public class JobController {
 
 	// Create a new Job
 	@PostMapping("/company/{companyID}/jobs")
-	public ResponseEntity<String> addJob(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+	public ResponseEntity<String> addJob(@AuthenticationPrincipal Applicant applicant,
 			@PathVariable("companyID") String companyID, @RequestBody Job job) {
 
-		String tempToken = token.split(" ")[0].trim();
-		if (token.isEmpty() || token.equals(null) || !tempToken.equals("Bearer"))
+		if (applicant == null)
 			return new ResponseEntity<String>("Token null or empty", HttpStatus.UNAUTHORIZED);
 		else {
 
@@ -84,11 +85,10 @@ public class JobController {
 
 	// Update a job
 	@PutMapping("/job/{id}")
-	public ResponseEntity<String> updateJob(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-			@PathVariable("id") String id, @RequestBody Job job) {
+	public ResponseEntity<String> updateJob(@AuthenticationPrincipal Applicant applicant, @PathVariable("id") String id,
+			@RequestBody Job job) {
 
-		String tempToken = token.split(" ")[0].trim();
-		if (token.isEmpty() || token.equals(null) || !tempToken.equals("Bearer"))
+		if (applicant == null)
 			return new ResponseEntity<String>("Token null or empty", HttpStatus.UNAUTHORIZED);
 		else {
 
@@ -106,10 +106,9 @@ public class JobController {
 
 	// Delete a job
 	@DeleteMapping("/job/{id}")
-	public ResponseEntity<String> deleteJob(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+	public ResponseEntity<String> deleteJob(@AuthenticationPrincipal Applicant applicant,
 			@PathVariable("id") String id) {
-		String tempToken = token.split(" ")[0].trim();
-		if (token.isEmpty() || token.equals(null) || !tempToken.equals("Bearer"))
+		if (applicant == null)
 			return new ResponseEntity<String>("Token null or empty", HttpStatus.UNAUTHORIZED);
 		else {
 

@@ -74,8 +74,8 @@ public class ApplicantService {
 
 	}
 
-	public Optional<Applicant> getApplicantById(String id) {
-		return applicantRepo.findById(id);
+	public Applicant getApplicantById(String id) {
+		return applicantRepo.findById(id).get();
 	}
 
 }
