@@ -35,8 +35,8 @@ public class Applicant_Credential {
 	private byte[] file_upload;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "fk_applicant_appid", nullable = false)
-	private Applicant applicant;
+	@JoinColumn(name = "fk_user_id", nullable = false)
+	private User user;
 
 	public Applicant_Credential(String credential_name, String document, String credential_file_type,
 			byte[] file_upload) {

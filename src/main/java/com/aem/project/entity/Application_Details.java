@@ -30,15 +30,11 @@ public class Application_Details {
 	private String application_doc;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "fk_applicant_appid", nullable = false)
-	private Applicant applicant;
+	@JoinColumn(name = "fk_user_id", nullable = false)
+	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "fk_job_id", nullable = false)
 	private Job job;
-
-//	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-//	@JoinColumn(name = "application_docURL", referencedColumnName = "document", nullable = false)
-//	private Applicant_Credential applicant_Credential;
 
 }

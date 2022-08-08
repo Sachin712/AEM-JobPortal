@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aem.project.entity.Applicant;
+import com.aem.project.entity.User;
 import com.aem.project.entity.AuthCredentialsRequest;
 import com.aem.project.util.JwtUtil;
 
@@ -35,9 +35,9 @@ public class AuthController {
 			Authentication authenticate = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
-			Applicant user = (Applicant) authenticate.getPrincipal();
+			User user = (User) authenticate.getPrincipal();
 
-			user.setApplicant_password(null);
+			user.setPassword(null);
 			return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwtUtil.generateToken(user)).body(user);
 		} catch (BadCredentialsException ex) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

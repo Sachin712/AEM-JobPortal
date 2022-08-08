@@ -8,21 +8,21 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.aem.project.entity.Applicant;
-import com.aem.project.repository.ApplicantRepository;
+import com.aem.project.entity.User;
+import com.aem.project.repository.UserRepository;
 import com.aem.project.util.CustomPasswordEncoder;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private ApplicantRepository applicantRepo;
+	private UserRepository applicantRepo;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
 
-		Optional<Applicant> applicantOpt = applicantRepo.findByUsername(username);
+		Optional<User> applicantOpt = applicantRepo.findByUsername(username);
 
 		return applicantOpt.orElseThrow(() -> new UsernameNotFoundException("Invalid credentials!"));
 	}

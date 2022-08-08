@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aem.project.entity.Applicant;
+import com.aem.project.entity.User;
 import com.aem.project.entity.Company;
 import com.aem.project.service.CompanyService;
 
@@ -33,15 +33,15 @@ public class CompanyController {
 
 	// To add a new company
 	@PostMapping("/company")
-	public ResponseEntity<String> addUser(@RequestBody Company companyData,
-			@AuthenticationPrincipal Applicant applicant) {
+	public ResponseEntity<?> addUser(@RequestBody Company companyData, @AuthenticationPrincipal User applicant) {
 
 		if (applicant == null)
 			return new ResponseEntity<String>("Token null or empty", HttpStatus.UNAUTHORIZED);
 		else {
-			companyService.addCompany(companyData);
+			Company addCompany = companyService.addCompany(companyData);
+			addCompany.setPassword(null);
 			log.info("Accessing post method... Company added successfully.");
-			return ResponseEntity.ok("Company added!");
+			return new ResponseEntity<>(addCompany, HttpStatus.OK);
 		}
 	}
 
@@ -59,7 +59,7 @@ public class CompanyController {
 
 	// Update a company info
 	@PutMapping("/company/{id}")
-	public ResponseEntity<?> updateCompany(@AuthenticationPrincipal Applicant applicant, @PathVariable String id,
+	public ResponseEntity<?> updateCompany(@AuthenticationPrincipal User applicant, @PathVariable String id,
 			@RequestBody Company company) throws IOException {
 
 		if (applicant == null)

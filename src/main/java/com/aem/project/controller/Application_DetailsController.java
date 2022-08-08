@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aem.project.entity.Applicant;
+import com.aem.project.entity.User;
 import com.aem.project.entity.Applicant_Credential;
 import com.aem.project.entity.Application_Details;
 import com.aem.project.entity.Job;
-import com.aem.project.service.ApplicantService;
+import com.aem.project.service.UserService;
 import com.aem.project.service.Application_DetailsService;
 import com.aem.project.service.JobService;
 
@@ -33,24 +33,24 @@ public class Application_DetailsController {
 	Application_DetailsService app_DetailsService;
 
 	@Autowired
-	ApplicantService appService;
+	UserService appService;
 
 	@Autowired
 	JobService jobService;
 
 	@Autowired
-	private ApplicantService applicationService;
+	private UserService applicationService;
 
 	// Add a new application detail
 	@PostMapping("/appdetails/{app_id}/{job_id}")
 	public ResponseEntity<?> addApplicationDetails(@PathVariable String app_id, @PathVariable String job_id,
 			@RequestBody Application_Details application_Details) {
 
-		Optional<Applicant> appInfo = appService.findById(app_id);
+		Optional<User> appInfo = appService.findById(app_id);
 		Optional<Job> jobInfo = jobService.findJobById(job_id);
 
 		if (appInfo.isPresent() && jobInfo.isPresent()) {
-			Applicant appData = appInfo.get();
+			User appData = appInfo.get();
 			appData.setId(app_id);
 			Job jobData = jobInfo.get();
 			jobData.setId(job_id);
@@ -76,7 +76,7 @@ public class Application_DetailsController {
 	@GetMapping("/appdetails/{applicantId}")
 	public ResponseEntity<?> getAllApplicationDetailsById(@PathVariable String applicantId) {
 
-		Optional<Applicant> applicantData = applicationService.findById(applicantId);
+		Optional<User> applicantData = applicationService.findById(applicantId);
 
 		if (applicantData.isPresent()) {
 			List<Application_Details> appDetails = app_DetailsService.getAllApplications(applicantId);

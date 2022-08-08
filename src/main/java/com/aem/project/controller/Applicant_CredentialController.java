@@ -26,10 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.aem.project.entity.Applicant;
+import com.aem.project.entity.User;
 import com.aem.project.entity.Applicant_Credential;
 import com.aem.project.entity.ResponseFile;
-import com.aem.project.service.ApplicantService;
+import com.aem.project.service.UserService;
 import com.aem.project.service.Applicant_CredentialService;
 
 import lombok.extern.log4j.Log4j;
@@ -42,7 +42,7 @@ public class Applicant_CredentialController {
 	@Autowired
 	private Applicant_CredentialService applicant_CredentialService;
 	@Autowired
-	private ApplicantService applicationService;
+	private UserService applicationService;
 
 	private ResponseFile resFile;
 
@@ -50,10 +50,10 @@ public class Applicant_CredentialController {
 	@Secured("ROLE_APPLICANT")
 	@PostMapping("/applicants/{applicantID}/credentials")
 	public ResponseFile addCredential(String applicantID, @RequestParam(value = "file") MultipartFile file,
-			@AuthenticationPrincipal Applicant applicant) throws IOException {
+			@AuthenticationPrincipal User applicant) throws IOException {
 
 		applicantID = applicant.getId();
-		Optional<Applicant> applicantData = applicationService.findById(applicantID);
+		Optional<User> applicantData = applicationService.findById(applicantID);
 		if (applicantData.isPresent()) {
 			Applicant_Credential appCred = applicant_CredentialService.addCredential(applicantID, file);
 
@@ -78,7 +78,7 @@ public class Applicant_CredentialController {
 	// Update a credential
 	@PutMapping("/credentials/{id}")
 	public ResponseEntity<?> updateCredential(@PathVariable("id") String id,
-			@RequestParam(value = "file") MultipartFile file, @AuthenticationPrincipal Applicant applicant) {
+			@RequestParam(value = "file") MultipartFile file, @AuthenticationPrincipal User applicant) {
 		if (applicant == null)
 			return new ResponseEntity<String>("Token null or empty", HttpStatus.UNAUTHORIZED);
 		else {
@@ -128,7 +128,7 @@ public class Applicant_CredentialController {
 	public ResponseEntity<List<Applicant_Credential>> getAllCredentials(
 			@PathVariable("applicantID") String applicantID) {
 
-		Optional<Applicant> applicantData = applicationService.findById(applicantID);
+		Optional<User> applicantData = applicationService.findById(applicantID);
 		if (applicantData.isPresent()) {
 			List<Applicant_Credential> applicant_Credentials = applicant_CredentialService
 					.getAllCredentials(applicantID);
@@ -149,7 +149,7 @@ public class Applicant_CredentialController {
 	}
 
 	@DeleteMapping("/admins/{id}")
-	public ResponseEntity<?> deleteCredential(@AuthenticationPrincipal Applicant applicant, @PathVariable String id) {
+	public ResponseEntity<?> deleteCredential(@AuthenticationPrincipal User applicant, @PathVariable String id) {
 		if (applicant == null)
 
 			return new ResponseEntity<String>("Token null or empty", HttpStatus.UNAUTHORIZED);

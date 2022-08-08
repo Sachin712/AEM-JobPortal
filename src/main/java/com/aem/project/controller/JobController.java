@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpHeaders;
 
-import com.aem.project.entity.Applicant;
+import com.aem.project.entity.User;
 import com.aem.project.entity.Company;
 import com.aem.project.entity.Job;
 import com.aem.project.service.CompanyService;
@@ -38,7 +38,7 @@ public class JobController {
 
 	// Create a new Job
 	@PostMapping("/company/{companyID}/jobs")
-	public ResponseEntity<String> addJob(@AuthenticationPrincipal Applicant applicant,
+	public ResponseEntity<String> addJob(@AuthenticationPrincipal User applicant,
 			@PathVariable("companyID") String companyID, @RequestBody Job job) {
 
 		if (applicant == null)
@@ -85,7 +85,7 @@ public class JobController {
 
 	// Update a job
 	@PutMapping("/job/{id}")
-	public ResponseEntity<String> updateJob(@AuthenticationPrincipal Applicant applicant, @PathVariable("id") String id,
+	public ResponseEntity<String> updateJob(@AuthenticationPrincipal User applicant, @PathVariable("id") String id,
 			@RequestBody Job job) {
 
 		if (applicant == null)
@@ -106,7 +106,7 @@ public class JobController {
 
 	// Delete a job
 	@DeleteMapping("/job/{id}")
-	public ResponseEntity<String> deleteJob(@AuthenticationPrincipal Applicant applicant,
+	public ResponseEntity<String> deleteJob(@AuthenticationPrincipal User applicant,
 			@PathVariable("id") String id) {
 		if (applicant == null)
 			return new ResponseEntity<String>("Token null or empty", HttpStatus.UNAUTHORIZED);

@@ -17,14 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.aem.project.repository.ApplicantRepository;
+import com.aem.project.repository.UserRepository;
 import com.aem.project.util.JwtUtil;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
 	@Autowired
-	private ApplicantRepository applicantRepository;
+	private UserRepository applicantRepository;
 
 	@Autowired
 	private JwtUtil jwtUtil;

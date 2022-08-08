@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.aem.project.entity.Applicant;
+import com.aem.project.entity.User;
 import com.aem.project.entity.Application_Details;
 import com.aem.project.entity.Job;
 import com.aem.project.repository.Application_DetailsRepository;
@@ -19,16 +19,16 @@ public class Application_DetailsService {
 	Application_DetailsRepository app_DetailsRepository;
 
 //	@Autowired
-//	Applicant appData;
+//	User appData;
 //
 //	@Autowired
 //	Job jobData;
 
-	public Application_Details addApplicationDetails(Applicant appData2, Job jobData2, Application_Details appDetails) {
+	public Application_Details addApplicationDetails(User appData2, Job jobData2, Application_Details appDetails) {
 		// TODO Auto-generated method stub
 
 		Application_Details appD = new Application_Details();
-		appD.setApplicant(appData2);
+		appD.setUser(appData2);
 		appD.setJob(jobData2);
 		appD.setApplication_status(appDetails.getApplication_status());
 		appD.setApplication_doc(appDetails.getApplication_doc());
@@ -48,7 +48,7 @@ public class Application_DetailsService {
 
 	public List<Application_Details> getAllApplications(String applicantId) {
 		// TODO Auto-generated method stub
-		return app_DetailsRepository.findByApplicantId(applicantId);
+		return app_DetailsRepository.findByUserId(applicantId);
 	}
 
 }
