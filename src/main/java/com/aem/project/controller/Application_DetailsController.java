@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -66,6 +67,13 @@ public class Application_DetailsController {
 		}
 	}
 
+	// Get all application details by Id
+	@GetMapping("/appdetails/{appDetail_Id}")
+	public Application_Details getApplicationDetailsById(@PathVariable String appDetail_Id) {
+
+		return app_DetailsService.getApplicationDetailsById(appDetail_Id);
+	}
+
 	// Get all application details
 	@GetMapping("/appdetails")
 	public List<Application_Details> getAllApplicationDetails() {
@@ -84,6 +92,26 @@ public class Application_DetailsController {
 			return new ResponseEntity<>(appDetails, HttpStatus.OK);
 		} else
 			return new ResponseEntity<>("No Data Found", HttpStatus.NOT_FOUND);
+	}
 
+	//Update application detail
+	@PutMapping("/appdetails/{appDetail_id}")
+	public ResponseEntity<?> updateApplicationDetails(@PathVariable String appDetail_id,
+			@RequestBody Application_Details application_Details) {
+
+		Optional<Application_Details> appDeets = Optional.of(app_DetailsService.getApplicationDetailById(appDetail_id));
+
+		if (appDeets.isPresent()) {
+
+			Application_Details appD = appDeets.get();
+
+			Application_Details appDetails = app_DetailsService.updateApplicationDetails(appD, application_Details);
+
+			log.info("Accessing put method... Application details updated");
+			return new ResponseEntity<>(appDetails, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("Application Details not updated", HttpStatus.NOT_MODIFIED);
+
+		}
 	}
 }

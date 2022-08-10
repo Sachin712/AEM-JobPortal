@@ -47,8 +47,7 @@ public class Applicant_CredentialController {
 	private ResponseFile resFile;
 
 	// Create a new credential
-	@Secured("ROLE_APPLICANT")
-	@PostMapping("/applicants/{applicantID}/credentials")
+	@PostMapping("/users/{applicantID}/credentials")
 	public ResponseFile addCredential(String applicantID, @RequestParam(value = "file") MultipartFile file,
 			@AuthenticationPrincipal User applicant) throws IOException {
 
@@ -124,7 +123,7 @@ public class Applicant_CredentialController {
 	}
 
 	// Get all credentials for an applicant
-	@GetMapping("/applicants/{applicantID}/credentials")
+	@GetMapping("/users/{applicantID}/credentials")
 	public ResponseEntity<List<Applicant_Credential>> getAllCredentials(
 			@PathVariable("applicantID") String applicantID) {
 

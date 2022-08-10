@@ -26,11 +26,13 @@ import com.aem.project.entity.User;
 import com.aem.project.entity.ResponseFile;
 import com.aem.project.service.UserService;
 
+import io.swagger.annotations.Api;
 import lombok.extern.log4j.Log4j;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @Log4j
+@Api(value = "User", description = "Users and Admin data")
 public class UserController {
 	@Autowired
 	private UserService userService;
