@@ -46,9 +46,9 @@ public class Application_DetailsService {
 		return app_DetailsRepository.findAll();
 	}
 
-	public List<Application_Details> getAllApplications(String applicantId) {
+	public List<Application_Details> getAllApplications(String jobId) {
 		// TODO Auto-generated method stub
-		return app_DetailsRepository.findByUserId(applicantId);
+		return app_DetailsRepository.findByJobId(jobId);
 	}
 
 	public Application_Details getApplicationDetailsById(String appDetail_Id) {
@@ -59,7 +59,7 @@ public class Application_DetailsService {
 	public Application_Details updateApplicationDetails(Application_Details appD,
 			Application_Details application_Details) {
 
-		appD.setApplication_doc(application_Details.getApplication_doc());
+		//appD.setApplication_doc(application_Details.getApplication_doc());
 		appD.setApplication_status(application_Details.getApplication_status());
 
 		return app_DetailsRepository.save(appD);

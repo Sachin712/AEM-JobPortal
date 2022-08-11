@@ -8,4 +8,6 @@ import com.aem.project.entity.Application_Details;
 
 public interface Application_DetailsRepository extends JpaRepository<Application_Details, String> {
 	List<Application_Details> findByUserId(String applicantID);
+
+	List<Application_Details> findByJobId(String jobID);
 }

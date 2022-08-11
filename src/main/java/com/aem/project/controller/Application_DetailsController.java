@@ -68,7 +68,7 @@ public class Application_DetailsController {
 	}
 
 	// Get all application details by Id
-	@GetMapping("/appdetails/{appDetail_Id}")
+	@GetMapping("/appdetails/details/{appDetail_Id}")
 	public Application_Details getApplicationDetailsById(@PathVariable String appDetail_Id) {
 
 		return app_DetailsService.getApplicationDetailsById(appDetail_Id);
@@ -80,14 +80,14 @@ public class Application_DetailsController {
 		return app_DetailsService.getApplicationDetails();
 	}
 
-	// Get all application details for an applicant
-	@GetMapping("/appdetails/{applicantId}")
-	public ResponseEntity<?> getAllApplicationDetailsById(@PathVariable String applicantId) {
+	// Get all application details for a specific job
+	@GetMapping("/appdetails/{jobId}")
+	public ResponseEntity<?> getAllApplicationDetailsById(@PathVariable String jobId) {
 
-		Optional<User> applicantData = applicationService.findById(applicantId);
+		Optional<Job> jobDataData = jobService.findJobById(jobId);
 
-		if (applicantData.isPresent()) {
-			List<Application_Details> appDetails = app_DetailsService.getAllApplications(applicantId);
+		if (jobDataData.isPresent()) {
+			List<Application_Details> appDetails = app_DetailsService.getAllApplications(jobId);
 
 			return new ResponseEntity<>(appDetails, HttpStatus.OK);
 		} else
