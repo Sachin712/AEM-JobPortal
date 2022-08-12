@@ -85,7 +85,7 @@ public class Application_DetailsController {
 	public ResponseEntity<?> getAllApplicationDetailsById(@PathVariable String jobId) {
 
 		Optional<Job> jobDataData = jobService.findJobById(jobId);
-
+ 
 		if (jobDataData.isPresent()) {
 			List<Application_Details> appDetails = app_DetailsService.getAllApplications(jobId);
 
