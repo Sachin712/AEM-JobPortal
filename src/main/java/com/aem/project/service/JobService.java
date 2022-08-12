@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.aem.project.entity.Job;
+import com.aem.project.entity.User;
 import com.aem.project.repository.CompanyRepository;
 import com.aem.project.repository.JobRepository;
 

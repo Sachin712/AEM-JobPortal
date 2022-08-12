@@ -94,12 +94,27 @@ public class Application_DetailsController {
 			return new ResponseEntity<>("No Data Found", HttpStatus.NOT_FOUND);
 	}
 
-	//Update application detail
+	// Get all application details for a specific applicant
+	@GetMapping("/appdetails/appId/{appId}")
+	public ResponseEntity<?> getAllAppDetailsById(@PathVariable String appId) {
+
+		Optional<User> userData = appService.findById(appId);
+
+		if (userData.isPresent()) {
+			List<Application_Details> appDetails = app_DetailsService.findByUserId(appId);
+
+			return new ResponseEntity<>(appDetails, HttpStatus.OK);
+		} else
+			return new ResponseEntity<>("No Data Found", HttpStatus.NOT_FOUND);
+	}
+
+	// Update application detail
 	@PutMapping("/appdetails/{appDetail_id}")
 	public ResponseEntity<?> updateApplicationDetails(@PathVariable String appDetail_id,
 			@RequestBody Application_Details application_Details) {
 
-		Optional<Application_Details> appDeets = Optional.of(app_DetailsService.getApplicationDetailById(appDetail_id));
+		Optional<Application_Details> appDeets = Optional
+				.of(app_DetailsService.getApplicationDetailsById(appDetail_id));
 
 		if (appDeets.isPresent()) {
 
