@@ -4,11 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.aem.project.entity.Job;
-import com.aem.project.entity.User;
 import com.aem.project.repository.CompanyRepository;
 import com.aem.project.repository.JobRepository;
 
@@ -20,6 +18,7 @@ public class JobService {
 	@Autowired
 	private CompanyRepository companyRepository;
 
+	// Add a job
 	public Job addJob(String companyID, Job job) {
 		Job jobData = new Job(job.getJob_title(), job.getJob_description(), job.getJob_location(), job.getJob_salary(),
 				job.getJob_posting_date(), job.getLast_application_date(), job.getNo_of_vacancy(), job.getJob_status());
@@ -34,17 +33,20 @@ public class JobService {
 
 	}
 
+	// Get all jobs by company Id
 	public List<Job> getAllJobs(String companyID) {
 		// TODO Auto-generated method stub
 
 		return jobRepository.findByCompanyId(companyID);
 	}
 
+	// Get all jobs by Id
 	public Optional<Job> findJobById(String jobID) {
 		// TODO Auto-generated method stub
 		return jobRepository.findById(jobID);
 	}
 
+	// Update a job
 	public Job updateJob(Optional<Job> jobData, Job job) {
 		// TODO Auto-generated method stub
 		Job jobInfo = jobData.get();
@@ -59,15 +61,17 @@ public class JobService {
 		return jobRepository.save(jobInfo);
 	}
 
+	// Delete a job
 	public void deleteJob(String id) {
 		// TODO Auto-generated method stub
 		jobRepository.deleteById(id);
 		return;
 	}
 
+	// Get all jobs
 	public List<Job> getJobs() {
 		// TODO Auto-generated method stub
-		return  jobRepository.findAll();
+		return jobRepository.findAll();
 	}
 
 }

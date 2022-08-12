@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.aem.project.entity.User;
 import com.aem.project.repository.UserRepository;
-import com.aem.project.util.CustomPasswordEncoder;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -18,6 +17,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
 	private UserRepository applicantRepo;
 
+	// Overriding existing loadUserByUsername method from UserDetailsService
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub

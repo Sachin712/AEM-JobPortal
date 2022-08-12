@@ -29,6 +29,7 @@ public class AuthController {
 	@Autowired
 	private JwtUtil jwtUtil;
 
+	// route to login /api/auth/login
 	@PostMapping("login")
 	public ResponseEntity<?> login(@RequestBody AuthCredentialsRequest request) {
 		try {

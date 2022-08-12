@@ -3,7 +3,6 @@ package com.aem.project.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aem.project.entity.User;
-import com.aem.project.entity.Applicant_Credential;
 import com.aem.project.entity.Application_Details;
 import com.aem.project.entity.Job;
 import com.aem.project.service.UserService;
@@ -38,9 +35,6 @@ public class Application_DetailsController {
 
 	@Autowired
 	JobService jobService;
-
-	@Autowired
-	private UserService applicationService;
 
 	// Add a new application detail
 	@PostMapping("/appdetails/{app_id}/{job_id}")
@@ -85,7 +79,7 @@ public class Application_DetailsController {
 	public ResponseEntity<?> getAllApplicationDetailsById(@PathVariable String jobId) {
 
 		Optional<Job> jobDataData = jobService.findJobById(jobId);
- 
+
 		if (jobDataData.isPresent()) {
 			List<Application_Details> appDetails = app_DetailsService.getAllApplications(jobId);
 

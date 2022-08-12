@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.HttpHeaders;
 
 import com.aem.project.entity.User;
 import com.aem.project.entity.Company;
@@ -87,7 +85,6 @@ public class JobController {
 	@PutMapping("/job/{id}")
 	public ResponseEntity<String> updateJob(@AuthenticationPrincipal User applicant, @PathVariable("id") String id,
 			@RequestBody Job job) {
-
 		if (applicant == null)
 			return new ResponseEntity<String>("Token null or empty", HttpStatus.UNAUTHORIZED);
 		else {
@@ -106,12 +103,10 @@ public class JobController {
 
 	// Delete a job
 	@DeleteMapping("/job/{id}")
-	public ResponseEntity<String> deleteJob(@AuthenticationPrincipal User applicant,
-			@PathVariable("id") String id) {
+	public ResponseEntity<String> deleteJob(@AuthenticationPrincipal User applicant, @PathVariable("id") String id) {
 		if (applicant == null)
 			return new ResponseEntity<String>("Token null or empty", HttpStatus.UNAUTHORIZED);
 		else {
-
 			Optional<Job> jobData = jobService.findJobById(id);
 			if (jobData.isPresent()) {
 				jobService.deleteJob(id);

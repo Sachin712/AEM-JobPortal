@@ -2,16 +2,12 @@ package com.aem.project.service;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.aem.project.entity.User;
 import com.aem.project.entity.Applicant_Credential;
 import com.aem.project.repository.UserRepository;
 import com.aem.project.repository.Applicant_CredentialRepository;
@@ -48,10 +44,12 @@ public class Applicant_CredentialService {
 		return applicant_CredentialRepo.findByUserId(applicantID);
 	}
 
+	//Get a credential by Id
 	public Applicant_Credential getCredentialById(String id) {
 		return applicant_CredentialRepo.findById(id).get();
 	}
 
+	//Update a credential
 	public Applicant_Credential updateCredential(Applicant_Credential credentialInfo, MultipartFile file)
 			throws IOException {
 		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -65,6 +63,7 @@ public class Applicant_CredentialService {
 
 	}
 
+	//Delete a credential
 	public void deleteCredential(String id) {
 		// TODO Auto-generated method stub
 		applicant_CredentialRepo.deleteById(id);
@@ -72,6 +71,7 @@ public class Applicant_CredentialService {
 
 	}
 
+	// Set document url
 	public Applicant_Credential setDoc(Applicant_Credential appCred) {
 		// TODO Auto-generated method stub
 		return applicant_CredentialRepo.save(appCred);
